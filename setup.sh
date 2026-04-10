@@ -4,7 +4,7 @@ set -euo pipefail
 echo "=== Linux Mint Dev Environment Setup ==="
 
 # Update system
-sudo apt update && sudo apt upgrade -y
+# sudo apt update && sudo apt upgrade -y
 
 # --- Dependencies & basic tools ---
 sudo apt install -y \
