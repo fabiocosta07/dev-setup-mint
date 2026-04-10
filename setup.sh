@@ -4,7 +4,7 @@ set -euo pipefail
 echo "=== Linux Mint Dev Environment Setup ==="
 
 # Update system
-# sudo apt update && sudo apt upgrade -y
+#sudo apt update && sudo apt upgrade -y
 
 # --- Dependencies & basic tools ---
 sudo apt install -y \
@@ -31,7 +31,7 @@ nvm alias default 25
 
 # --- Claude Code ---
 echo "Installing Claude Code..."
-npm install -g @anthropic-ai/claude-code
+curl -fsSL https://claude.ai/install.sh | bash
 
 # --- Podman & podman-compose ---
 echo "Installing Podman..."
@@ -74,6 +74,18 @@ unzip -o jetbrains.zip -d "$FONT_DIR/JetBrainsMono"
 fc-cache -fv
 cd ~
 
+# --- Set Kitty as default terminal ---
+echo "Setting Kitty as default terminal..."
+sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator "$(which kitty)" 50
+sudo update-alternatives --set x-terminal-emulator "$(which kitty)"
+
+# --- GitHub CLI ---
+echo "Installing GitHub CLI..."
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list >/dev/null
+sudo apt update
+sudo apt install -y gh
+
 # --- Google Chrome ---
 echo "Installing Google Chrome..."
 cd /tmp
@@ -98,4 +110,5 @@ command -v kitty && echo "kitty $(kitty --version)"
 command -v google-chrome-stable && google-chrome-stable --version
 command -v vim && echo "vim $(vim --version | head -1)"
 command -v claude && echo "Claude Code $(claude --version)"
+command -v gh && echo "gh $(gh --version | head -1)"
 echo "Nerd Font: JetBrainsMono installed in $FONT_DIR"
